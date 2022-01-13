@@ -4,9 +4,19 @@ import Letter from "./Letter";
 import { appContext } from "../lib/ContextProvider";
 
 const Word = ({ word, wordIdx }) => {
-  const { input } = useContext(appContext);
+  const { input, setIncorrectWords } = useContext(appContext);
   const inputArray = input.split(" ");
   const inputWord = inputArray[wordIdx];
+  const inputLength = inputArray.length;
+
+  useEffect(() => {
+    const isCurrentWord = !inputWord || wordIdx === inputArray.length - 1;
+    const isWrongWord = inputWord !== word;
+
+    if (!isCurrentWord && isWrongWord) {
+      setIncorrectWords((prev) => ({ ...prev, [word]: true }));
+    }
+  }, [inputLength]);
 
   return (
     <WordStyles

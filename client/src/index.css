@@ -7,15 +7,25 @@
 }
 
 body {
-  margin: 0;
-  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: hsl(222, 33%, 19%);
+  display: grid;
+  place-content: center;
+  height: 100vh;
+  gap: 50vw;
+  margin: 0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+h1 {
+  position: absolute;
+  top: 1vmin;
+  font-family: Pacifico;
+  left: 10%;
+  font-size: clamp(30px, 6vmin, 6vmin);
+  color: aliceblue;
+  @font-face {
+    font-family: Pacifico;
+    src: url("../Assets/fonts/Pacifico-Regular.ttf");
+  }
 }

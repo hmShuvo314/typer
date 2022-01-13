@@ -8,6 +8,7 @@ const PointerStyles = styled.span`
   display: block;
   width: 2px;
   height: 3.5vmin;
+  min-height: 18px;
   position: absolute;
   transform: translateY(15%);
   top: 1vmin;
@@ -16,10 +17,11 @@ const PointerStyles = styled.span`
   transition: all 0.15s;
 `;
 const Sentence = ({ sentence }) => {
-  const { input, letterRef, isExcess } = useContext(appContext);
+  const { input, letterRef } = useContext(appContext);
   const [left, setLeft] = useState(0);
   const [top, setTop] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+
   useEffect(() => {
     const newLeft = letterRef?.current?.offsetLeft;
     const newTop = letterRef?.current?.offsetTop;
@@ -45,16 +47,15 @@ const Sentence = ({ sentence }) => {
     return () => {
       window.removeEventListener("keydown", handle);
     };
-
-    // const left = `${inputLength * window.innerHeight * 0.019}px`,
   }, [input, letterRef]);
 
   return (
     <SentenceStyles>
       <PointerStyles style={{ left: left + "px", top: top + "px" }} />
-      {sentence.map((word, wordIdx) => {
-        return <Word word={word} key={wordIdx} wordIdx={wordIdx} />;
-      })}
+      {sentence &&
+        sentence.map((word, wordIdx) => {
+          return <Word word={word} key={wordIdx} wordIdx={wordIdx} />;
+        })}
     </SentenceStyles>
   );
 };

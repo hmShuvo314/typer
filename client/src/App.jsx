@@ -2,39 +2,65 @@ import { useContext, useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import "./App.css";
 import BattleField from "./Components/BattleField";
+import Modal from "./Components/Modal";
 import Rocket from "./Components/Rocket";
 import Sentence from "./Components/Sentence";
 import { appContext } from "./lib/ContextProvider";
-import { sentence } from "./lib/sentences";
+import { generateTestSentence } from "./lib/GenerateTestSentence";
+import beep from "./Assets/sounds/beep.wav";
 
 function App() {
-  const { input, setInput, socket, setSocket, users, setUsers } =
-    useContext(appContext);
+  const {
+    input,
+    setInput,
+    setTestSentence,
+    testSentence,
+    setStartOrStop,
+    isModalOpen,
+    setIsModalOpen,
+  } = useContext(appContext);
+
+  const [audio] = useState(new Audio(beep));
   const inputRef = useRef();
 
   useEffect(() => {
-    const s = io("http://localhost:8080");
-    setSocket(s);
-    return () => {
-      s.disconnect();
-    };
+    const newTestSentence = generateTestSentence();
+    setTestSentence(newTestSentence);
   }, []);
 
-  useEffect(() => {
-    if (!socket) return;
-    socket.emit("join-user");
+  const handleChange = (e) => {
+    audio.currentTime = 0;
+    audio.play();
 
-    socket.on("set-user", (member) => {
-      console.log(member);
-      setUsers(member);
-    });
-  }, [socket]);
+    const updatedInput = e.target.value;
 
-  return (
+    const isAddingMultipleSpaces =
+      input.slice(-1) === " " && updatedInput.slice(-1) === " ";
+    const isDeletingAWord =
+      input.split(" ").length > updatedInput.split(" ").length;
+    const isFinishied = updatedInput.split(" ").length > testSentence.length;
+
+    if (isAddingMultipleSpaces) return;
+    if (isFinishied) {
+      setStartOrStop("stop");
+      setIsModalOpen(true);
+      return;
+    }
+    if (isDeletingAWord) return;
+
+    setInput(updatedInput);
+  };
+
+  return isModalOpen ? (
+    <>
+      <h1>Typer</h1>
+      <Modal />
+    </>
+  ) : (
     <div className="App" onClick={() => inputRef?.current?.focus()}>
+      <h1>Typer</h1>
       <BattleField />
-      <Sentence sentence={sentence} />
-
+      <Sentence sentence={testSentence} />
       <input
         style={{
           opacity: 0,
@@ -43,17 +69,7 @@ function App() {
         autoFocus
         type="text"
         value={input}
-        onChange={(e) => {
-          const isAddingMultipleSpaces =
-            input.slice(-1) === " " && e.target.value.slice(-1) === " ";
-          const isDeletingAWord =
-            input.split(" ").length > e.target.value.split(" ").length;
-          const isFinishied = input.split(" ").length - 1 >= sentence.length;
-          if (isAddingMultipleSpaces) return;
-          // if (isFinishied) return;
-
-          setInput(e.target.value);
-        }}
+        onChange={handleChange}
       />
     </div>
   );

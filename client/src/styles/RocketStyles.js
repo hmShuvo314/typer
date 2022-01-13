@@ -1,10 +1,7 @@
 import styled from "styled-components";
 
 export const RocketStyles = styled.div`
-  /* width: 5vmin;
-  height: 5vmin; */
-  /* background-color: red; */
-  font-size: 6vmin;
+  font-size: clamp(40px, 7vmin, 7vmin);
   color: aquamarine;
   position: absolute;
   bottom: 0%;

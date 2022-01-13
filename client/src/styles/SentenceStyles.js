@@ -7,13 +7,14 @@ export const SentenceStyles = styled.div`
     src: url(${RobotoMono});
   }
   display: flex;
-  width: 50vw;
+  width: clamp(250px, 50vw, 50vw);
+
   flex-wrap: wrap;
   height: fit-content;
   position: relative;
   gap: 2vmin;
   color: aliceblue;
-  font-size: 3vmin;
+  font-size: clamp(15px, 3.2vmin, 3.2vmin);
   font-weight: 900;
   color: #5c7da5;
   font-family: Roboto;
@@ -21,10 +22,8 @@ export const SentenceStyles = styled.div`
   .wrong {
     border-bottom: 2px solid rgb(223, 69, 118);
   }
-  /* border: 0.5px solid cyan; */
 `;
 export const WordStyles = styled.div`
-  /* border: 0.5px solid cyan; */
   gap: 1px;
   display: flex;
   .correct {
@@ -41,6 +40,4 @@ export const LetterStyles = styled.span`
   display: inline-block;
   display: grid;
   place-content: center;
-  /* width: 2.17vmin; */
-  /* border: 0.5px solid cyan; */
 `;

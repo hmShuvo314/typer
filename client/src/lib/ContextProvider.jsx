@@ -1,28 +1,44 @@
-import React, { createContext, useRef, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 
 const appContext = createContext();
 const Provider = appContext.Provider;
 
 const ContextProvider = ({ children }) => {
   const [input, setInput] = useState("");
-  const [users, setUsers] = useState([]);
-  const [socket, setSocket] = useState(null);
   const [letterRef, setLetterRef] = useState(null);
-  const [isExcess, setIsExcess] = useState(false);
+  const [testSentence, setTestSentence] = useState("");
+  const [incorrectWords, setIncorrectWords] = useState({});
+  const [count, setCount] = useState(1);
+  const [startOrStop, setStartOrStop] = useState("stop");
+  const [isModalOpen, setIsModalOpen] = useState(true);
+
+  useEffect(() => {
+    if (startOrStop === "stop") return;
+    setCount(1);
+
+    const interval = setInterval(() => {
+      setCount((seconds) => seconds + 1);
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [startOrStop]);
 
   return (
     <Provider
       value={{
         input,
         setInput,
-        users,
-        setUsers,
-        socket,
-        setSocket,
         letterRef,
         setLetterRef,
-        isExcess,
-        setIsExcess,
+        testSentence,
+        setTestSentence,
+        incorrectWords,
+        setIncorrectWords,
+        count,
+        setStartOrStop,
+        isModalOpen,
+        setIsModalOpen,
       }}
     >
       {children}
